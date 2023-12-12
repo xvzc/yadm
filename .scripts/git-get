@@ -1,0 +1,33 @@
+#!/bin/sh
+
+if [ "$1" = "--personal" ] || [ "$1" = "-p" ]; then
+  GITHUB_UNAME=$PERSONAL_GITHUB_UNAME
+  GITHUB_EMAIL=$PERSONAL_GITHUB_EMAIL
+  GITHUB_TOKEN=$PERSONAL_GITHUB_TOKEN
+elif [ "$1" = "--work" ] || [ "$1" = "-w" ]; then
+  GITHUB_UNAME=$WORK_GITHUB_UNAME
+  GITHUB_EMAIL=$WORK_GITHUB_EMAIL
+  GITHUB_TOKEN=$WORK_GITHUB_TOKEN
+else
+  echo "Invalid option."
+  echo "Usage: $(basename $0) -[p | w]"
+  exit 1
+fi
+
+set -- "${@:2}" # remove the first arg
+
+i=1
+for arg do
+  REPO_URL=$(echo "$arg" | grep -o -e "github.com.*")
+
+  if [[ "$?" -eq 0 ]]; then
+    break;
+  fi
+
+  i=$((i + 1))
+done
+
+REPO_URL="https://$GITHUB_UNAME:$GITHUB_TOKEN@$REPO_URL"
+set -- "${@:1:$((i-1))}" "$REPO_URL" "${@:$((i+1))}"
+
+git clone "$@"

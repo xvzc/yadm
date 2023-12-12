@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Because Git submodule commands cannot operate without a work tree, they must
+# be run from within $HOME (assuming this is the root of your dotfiles)
+# cd "$HOME"
+
+# echo "Init submodules"
+# yadm submodule update --recursive --init
+#
+
+if [ $(uname -a | grep -c "Darwin") -ne 0 ]; then
+  brew bundle --file=~/.config/yadm/Brewfile
+fi
+
+if [ $(uname -a | grep -c "arch-linux") -ne 0 ]; then
+  yay -S --needed --noconfirm - < ~/.config/yadm/yay-list.txt
+fi
+
+# if [ uname -a | grep -q "arch-linux" ]; then
+# fi
+#
