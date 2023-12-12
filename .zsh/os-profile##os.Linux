@@ -1,0 +1,5 @@
+#!/bin/zsh
+alias open='thunar'
+
+function _yadm-add(){ _ls }
+
